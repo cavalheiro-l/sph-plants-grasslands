@@ -9,7 +9,7 @@ FILES:
 
 		Interaction Network: Hawkmoth-plant mutualistic network from Southern Brazil. Each cell of the matrix represent the number of visits (interaction frequencies) of each hawkmoth species on each plant species during the study.
 
-		Sampling effort: Total sampling effort (hour of focal observation) on each plant species of the study.
+		Sampling effort: Total sampling effort (hours of focal observation) on each plant species of the study.
 	
 		Morphology: Corolla depth and proboscis length (mean ± sd) of plants and hawkmoths that interacted in Southern Brazil. Open or brush shape flowers were considered to have depth = 0.1 cm as virtually any hawkmoth have proboscis long enough to access the nectar.
 
