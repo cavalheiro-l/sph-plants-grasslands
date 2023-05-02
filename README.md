@@ -1,4 +1,5 @@
 # sph-plants-grasslands
+DOI: https://doi.org/10.5281/zenodo.7886325.
 
 Dataset from the paper Cavalheiro et al. "Evolutionary history and ecological traits shape a mutualistic plant-hawkmoth interaction network" (in review). Also available at supplemental material from Lautenschleger et al. 2020 (https://doi.org/10.1111/een.12961).
 
@@ -23,4 +24,5 @@ FILES:
 
 	sphingidae-tree.nex file contains the evolutionary tree of the hawkmoth species of the study on the nexus format.
 
-For methodological information please acess the papers above, and in case of using this dataset, please cite.
+For methodological information please acess the papers above, and in case of using this dataset, please cite the papers and this dataset.
+
