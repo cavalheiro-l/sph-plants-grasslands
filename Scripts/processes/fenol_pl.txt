@@ -1,0 +1,14 @@
+	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18
+Calliandra_brevipes	0	0	1	0	1	1	1	0	0	0	1	1	0	1	0	0	0	0
+Cantinoa_mutabilis	0	0	0	1	1	1	1	1	1	1	1	0	0	0	0	0	0	0
+Cereus_hildmannianus	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	1	0	0
+Duranta_erecta	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1
+Hedychium_coronarium	0	0	1	1	1	1	1	1	1	0	0	0	0	1	0	1	1	0
+Hibiscus_rosa-sinensis	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1
+Inga_vera	0	1	1	1	0	0	0	0	0	0	0	0	1	1	1	0	0	0
+Inga_marginata	0	0	0	0	0	0	0	0	0	0	0	0	0	0	1	1	0	0
+Ipomoea_alba	1	1	1	1	1	1	1	1	0	0	0	0	0	1	0	1	1	1
+Lantana_camara	1	1	1	1	1	0	0	0	1	1	1	1	1	1	1	1	0	0
+Luehea_divaricata	0	0	1	1	1	1	0	0	0	0	0	0	0	0	1	1	0	0
+Nicotiana_alata	1	1	1	1	1	1	1	0	0	0	1	1	1	1	0	0	0	0
+Oenothera_ravenii	1	1	1	0	0	1	0	0	0	0	0	0	1	1	1	0	0	0

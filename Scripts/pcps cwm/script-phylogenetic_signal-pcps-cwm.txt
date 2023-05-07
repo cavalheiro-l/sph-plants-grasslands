@@ -1,0 +1,120 @@
+
+library(picante)
+library(ape)
+library(phytools)
+
+tree <- read.tree("sphingidae-tree.nex")
+plot(tree)
+tree
+tree[["tip.label"]]
+
+probos <- c(10, 5.4, 5.9, 6.6, 7, 3.1, 5.8, 4.5, 4.2, 4.4, 5, 3.7, 1.5, 1.5, 4, 3.4, 3.8)
+abun <- c(0.0340, 0.0766, 0.0723, 0.0128, 0.0128, 0.0043, 0.0128, 0.0170, 0.1234, 0.0809, 0.0043, 0.0128, 0.4085, 0.0511, 0.0255, 0.0383, 0.0128)
+fenol <- c(4, 3, 3, 3, 1, 1, 2, 2, 4, 2, 1, 2, 5, 2, 2, 3, 2)
+names(probos) <- names(abun) <- names(fenol) <- c("Agrius_cingulata", "Manduca_florestan", "Manduca_contracta", "Manduca_brasiliensis", "Manduca_diffisa", "Protambulyx_strigilis", "Eumorpha_labruscae", "Eumorpha_triangulum", "Eumorpha_vitis", "Eumorpha_fasciatus", "Pachylia_ficus", "Pachylia_syces", "Aellopos_titan", "Perigonia_passerina", "Erinnyis_ello", "Xylophanes_tersa", "Xylophanes_anubus")
+
+names(probos)==tree$tip.label
+names(abun)==tree$tip.label
+names(fenol)==tree$tip.label
+
+probos_signal <- phylosignal(probos, tree, reps = 999, checkdata=TRUE)
+abun_signal <- phylosignal(abun, tree, reps = 999, checkdata=TRUE)
+fenol_signal <- phylosignal(fenol, tree, reps = 999, checkdata=TRUE)
+
+probos_signal
+abun_signal
+fenol_signal
+
+#SAME WITH PLANTS
+
+
+library(PCPS)
+
+tree=read.tree("sphingidae-tree.nex")
+plot(tree)
+comm<-read.table("comm", header = TRUE)
+envir<-read.table("envir", header = TRUE)
+
+dist_spp<-cophenetic(tree)
+
+matrix.p.sig(comm,dist_spp,envir,
+             analysis = "adonis", runs=999)
+
+
+
+require(devtools)
+require(githubinstall)
+require(ape)
+require(SYNCSA)
+
+comm<-read.table("comm", header = TRUE)
+traits<-read.table("traits", header = TRUE) 
+envir<-read.table("envir", header = TRUE) 
+tree=read.tree("sphingidae-tree)
+plot(tree)
+
+cwm.sig<-function(comm, traits, envir, formula, PGLS =
+                    TRUE, tree, AsFactors = NULL, runs = 999){
+  RES <- list(call = match.call())
+  envir <- as.data.frame(envir)
+  if (!is.null(AsFactors)) {
+    for (i in AsFactors) {
+      envir[, i] <- as.factor(envir[, i])
+    }
+  }
+  envir.class <- SYNCSA::var.type(envir)
+  RES$envir.class <- envir.class
+  trait.name <- as.character(stats::as.formula(formula)[[2]])
+  trait <- traits[, trait.name, drop = FALSE]
+  RES$formula <- formula
+  RES$PGLS <- PGLS
+  if(PGLS){
+    cor.phy <- ape::corBrownian(phy = tree)
+    model.pgls <- as.formula(paste(trait.name, "~1",
+                                   collapse = ""))
+    fit.pgls <- nlme::gls(model = model.pgls, data =
+                            as.data.frame(trait), correlation = cor.phy)
+    RES$PGLS.model <- fit.pgls
+    res.fit.pgls <- as.data.frame(residuals(fit.pgls, type =
+                                              "normalized"))
+    colnames(res.fit.pgls) <- colnames(trait)
+    RES$trait.residuals <- res.fit.pgls
+    trait.temp <- res.fit.pgls
+  } else {
+    trait.temp <- trait
+  }
+  MT <- SYNCSA::matrix.t(comm, trait.temp, scale =FALSE)$matrix.T
+  data.obs <- as.data.frame(cbind(MT, envir))
+  mod.obs <- stats::glm(formula, data = data.obs)
+  F.obs <- stats::summary.lm(mod.obs)$fstatistic[1]
+  RES$model <- mod.obs
+  RES$statistic.obs <- F.obs
+  F.null.site <- matrix(NA, runs, 1)
+  F.null.trait <- matrix(NA, runs, 1)
+  for (i in 1:runs){
+    MT.null.site <-
+      SYNCSA::permut.row.matrix(MT)$permut.matrix
+    data.null.site <- as.data.frame(cbind(MT.null.site,
+                                          envir))
+    mod.null.site <- stats::glm(formula, data =
+                                  data.null.site)
+    F.null.site[i,] <-
+      stats::summary.lm(mod.null.site)$fstatistic[1]
+    MT.null.trait <- SYNCSA::matrix.t(comm,
+                                      permut.row.matrix(trait.temp)$permut.matrix, scale =
+                                        FALSE)$matrix.T
+    data.null.trait <- as.data.frame(cbind(MT.null.trait,
+                                           envir))
+    mod.null.trait <- stats::glm(formula, data =
+                                   data.null.trait)
+    F.null.trait[i, ] <-
+      stats::summary.lm(mod.null.trait)$fstatistic[1]
+  }
+  RES$prob.site.shuffle <- (sum(ifelse(F.null.site>=F.obs, 1,
+                                       0))+1)/(runs+1)
+  RES$prob.trait.shuffle <-(sum(ifelse(F.null.trait>=F.obs,
+                                       1, 0))+1)/(runs+1)
+  return(RES)
+}
+
+cwm.sig(comm = comm, traits = traits, envir = envir, formula=morfo~envir,tree= tree)

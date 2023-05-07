@@ -1,0 +1,142 @@
+library(ape)
+library(phytools)
+library(geiger)
+
+tree<-read.tree(file.choose("sph-phylo.tre"))
+plotTree(tree, fsize=0.2, lwd=1)
+tree
+
+is.ultrametric(tree)
+is.rooted(tree)
+is.binary.tree(tree)
+
+tree<-force.ultrametric(tree, method=c("nnls"))
+is.ultrametric(tree)
+
+tree["tip.label"]
+
+myspecies<-read.table(file.choose("sph_taxa.txt"))
+myspecies
+
+#Aellopos_titan
+fastMRCA(tree,"A_ceculus_Aellopoc_1","A_tantalus_Aellopot_1")
+tree<-bind.tip(tree,"Aellopos_titan", where=329, position=0) 
+plotTree(tree, fsize=0.2, lwd=1)
+
+#Agrius_cingulata
+position<-which(tree$tip.label == "A_cingulata_Agrius_1")
+tree$tip.label[position]<-"Agrius_cingulata"
+tree$tip.label
+
+#Erinnyis ello
+position<-which(tree$tip.label == "E_ello_Erinnyis_1")
+tree$tip.label[position]<-"Erinnyis_ello"
+tree$tip.label
+
+#Eumorpha_labruscae
+fastMRCA(tree,"E_capronnieri_E_capro", "E_phorbas_E_phor")
+tree<-bind.tip(tree,"Eumorpha_labruscae", where=317, position=0) 
+plotTree(tree, fsize=0.2, lwd=1)
+
+#Eumorpha_triangulum
+position<-which(tree$tip.label == "E_triangulum_trian")
+tree$tip.label[position]<-"Eumorpha_triangulum"
+tree$tip.label
+
+#Eumorpha_vitis
+here<-which(tree$tip.label=="Eumorpha_triangulum")
+here
+n<-length(tree$tip.label)
+ee<-setNames(tree$edge.length[sapply(1:n,function(x,y)which(y==x),y=tree$edge[,2])],tree$tip.label)
+posicao<-ee["Eumorpha_triangulum"]
+tree<-bind.tip(tree,"Eumorpha_vitis",where=here,position=posicao/2)
+plotTree(tree,fsize=0.2, lwd=1)
+
+#Eumorpha_fasciatus
+position<-which(tree$tip.label == "E_satellitia_E_satel")
+tree$tip.label[position]<-"Eumorpha_fasciatus"
+tree$tip.label
+plotTree(tree,fsize=0.2, lwd=1)
+
+#Manduca_contracta
+here<-which(tree$tip.label=="M_lucetius_Clak")
+here
+n<-length(tree$tip.label)
+ee<-setNames(tree$edge.length[sapply(1:n,function(x,y)which(y==x),y=tree$edge[,2])],tree$tip.label)
+posicao<-ee["M_lucetius_Clak"]
+tree<-bind.tip(tree,"Manduca_contracta",where=here,position=posicao/2)
+plotTree(tree,fsize=0.2, lwd=1)
+
+#Manduca_brasiliensis
+here<-which(tree$tip.label=="Manduca_contracta")
+here
+n<-length(tree$tip.label)
+ee<-setNames(tree$edge.length[sapply(1:n,function(x,y)which(y==x),y=tree$edge[,2])],tree$tip.label)
+posicao<-ee["Manduca_contracta"]
+tree<-bind.tip(tree,"Manduca_brasiliensis",where=here,position=posicao/2)
+plotTree(tree,fsize=0.2, lwd=1)
+
+#Manduca_diffisa
+position<-which(tree$tip.label == "M_diffisa_Trop")
+tree$tip.label[position]<-"Manduca_diffisa"
+tree$tip.label
+
+#Manduca_florestan
+position<-which(tree$tip.label == "M_florestan_Manducaf_1")
+tree$tip.label[position]<-"Manduca_florestan"
+tree$tip.label
+
+#Pachylia_ficus
+position<-which(tree$tip.label == "P_ficus_Pachylia_1")
+tree$tip.label[position]<-"Pachylia_ficus"
+tree$tip.label
+
+#Pachylia_syces
+here<-which(tree$tip.label=="Pachylia_ficus")
+here
+n<-length(tree$tip.label)
+ee<-setNames(tree$edge.length[sapply(1:n,function(x,y)which(y==x),y=tree$edge[,2])],tree$tip.label)
+posicao<-ee["Pachylia_ficus"]
+tree<-bind.tip(tree,"Pachylia_syces",where=here,position=posicao/2)
+plotTree(tree,fsize=0.2, lwd=1)
+
+#Perigonia_passerina
+here<-which(tree$tip.label=="Perigonia_pallida_14200")
+here
+n<-length(tree$tip.label)
+ee<-setNames(tree$edge.length[sapply(1:n,function(x,y)which(y==x),y=tree$edge[,2])],tree$tip.label)
+posicao<-ee["Perigonia_pallida_14200"]
+tree<-bind.tip(tree,"Perigonia_passerina",where=here,position=posicao/2)
+plotTree(tree,fsize=0.2, lwd=1)
+
+#Protambulyx_strigilis
+position<-which(tree$tip.label == "Protambulyx_strigilis_14167")
+tree$tip.label[position]<-"Protambulyx_strigilis"
+tree$tip.label
+
+#Xylophanes_anubus
+position<-which(tree$tip.label == "X_anubus_Xanu")
+tree$tip.label[position]<-"Xylophanes_anubus"
+tree$tip.label
+
+#Xylophanes_tersa
+position<-which(tree$tip.label == "X_tersa_Xyloter_1")
+tree$tip.label[position]<-"Xylophanes_tersa"
+tree$tip.label
+plotTree(tree,fsize=0.2, lwd=1)
+
+
+comparison<-name.check(tree,myspecies,data.names=myspecies[,1])
+comparison
+comparison$tree_not_data
+pruned.tree<-drop.tip(tree,comparison$tree_not_data)
+pruned.tree
+
+plotTree(pruned.tree, fsize=0.5, lwd=1);axisPhylo()
+
+is.ultrametric(tree)
+is.rooted(tree)
+is.binary.tree(tree)
+
+tree_myspecies<-write.tree(pruned.tree)
+write.tree(pruned.tree,"tree_myspecies2.nex")

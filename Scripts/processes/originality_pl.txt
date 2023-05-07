@@ -1,0 +1,14 @@
+                          QEbased
+Calliandra_brevipes    0.04998585
+Inga_marginata         0.03332391
+Inga_vera              0.03332391
+Hibiscus_rosa_sinensis 0.07055740
+Luehea_divaricata      0.07055740
+Oenothera_ravenii      0.10012430
+Cantinoa_mutabilis     0.05323534
+Lantana_camara         0.03549022
+Duranta_erecta         0.03549022
+Ipomoea_alba           0.05926523
+Nicotiana_alata        0.05926523
+Cereus_hildmannianus   0.11518940
+Hedychium_coronarium   0.28419158

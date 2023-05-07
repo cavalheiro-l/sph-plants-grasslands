@@ -1,0 +1,19 @@
+# PHYLOCOM 
+# obtain and instal PHYLOCOM at https://github.com/phylocom/phylocom/releases
+
+# obtain following files:
+# "taxa.txt" - local species list (family/genera/specie)
+# "megatree.new" - download "R20160415 Gastauer" from camwebb repository at https://github.com/camwebb/tree-of-trees
+# "ages" - download "angiosperms_magallon2009" from camwebb repository at https://github.com/camwebb/tree-of-trees
+
+# save these files on w32 arquive on Phylocom
+
+# run the following commands on phylocom.bat:
+
+
+	phylomatic -f megatree.new -t taxa.txt -l > regionaltree.new 
+
+
+	phylocom bladj -f regionaltree.new > datedregionaltree.new
+
+#rename the file from "datedregionaltree.new" to "plants-tree.new"

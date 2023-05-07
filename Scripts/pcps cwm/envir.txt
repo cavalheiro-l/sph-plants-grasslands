@@ -1,0 +1,14 @@
+	envir
+Calliandra_brevipes	mod_2
+Cantinoa_mutabilis	mod_1
+Cereus_hildmannianus	mod_3
+Duranta_erecta	mod_1
+Hedychium_coronarium	mod_3
+Hibiscus_rosa-sinensis	mod_2
+Inga_vera	mod_2
+Inga_marginata	mod_1
+Ipomoea_alba	mod_3
+Lantana_camara	mod_1
+Luehea_divaricata	mod_1
+Nicotiana_alata	mod_3
+Oenothera_ravenii	mod_3

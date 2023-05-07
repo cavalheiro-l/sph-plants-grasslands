@@ -1,0 +1,13 @@
+Fabaceae/Calliandra/Calliandra_brevipes
+Lamiaceae/Cantinoa/Cantinoa_mutabilis
+Cactaceae/Cereus/Cereus_hildmannianus
+Verbenaceae/Duranta/Duranta_erecta
+Zingiberaceae/Hedychium/Hedychium_coronarium
+Malvaceae/Hibiscus/Hibiscus_rosa-sinensis
+Fabaceae/Inga/Inga_marginata
+Fabaceae/Inga/Inga_vera
+Convolvulaceae/Ipomoea/Ipomoea_alba
+Verbenaceae/Lantana/Lantana_camara
+Malvaceae/Luehea/Luehea_divaricata
+Solanaceae/Nicotiana/Nicotiana_alata
+Onagraceae/Oenothera/Oenothera_ravenii

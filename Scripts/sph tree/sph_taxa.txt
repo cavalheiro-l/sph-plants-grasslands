@@ -1,0 +1,17 @@
+Aellopos_titan
+Agrius_cingulata
+Erinnyis_ello
+Eumorpha_fasciatus
+Eumorpha_labruscae
+Eumorpha_triangulum
+Eumorpha_vitis
+Manduca_contracta
+Manduca_diffisa
+Manduca_florestan
+Manduca_brasiliensis
+Pachylia_ficus
+Pachylia_syces
+Perigonia_passerina
+Protambulyx_strigilis
+Xylophanes_anubus
+Xylophanes_tersa

@@ -1,0 +1,14 @@
+	Aellopos_titan	Agrius_cingulata	Erinnyis_ello	Eumorpha_fasciatus	Eumorpha_labruscae	Eumorpha_triangulum	Eumorpha_vitis	Manduca_contracta	Manduca_diffisa	Manduca_florestan	Manduca_brasiliensis	Pachylia_ficus	Pachylia_syces	Perigonia_passerina	Protambulyx_strigilis	Xylophanes_anubus	Xylophanes_tersa
+Calliandra_brevipes	6	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	6
+Cantinoa_mutabilis	6	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Cereus_hildmannianus	0	0	0	0	0	0	0	0	0	0	8	0	0	0	0	0	0
+Duranta_erecta	363	0	0	0	0	0	0	0	0	0	0	0	0	44	0	0	7
+Hedychium_coronarium	0	9	7	7	5	7	7	2	0	0	5	2	0	0	2	5	0
+Hibiscus_rosa-sinensis	0	0	0	0	0	0	0	0	0	0	0	0	10	0	0	0	0
+Inga_vera	130	0	20	90	0	0	0	0	0	10	0	0	20	50	0	0	30
+Inga_marginata	57	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Ipomoea_alba	0	3	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Lantana_camara	32	0	0	0	0	0	0	0	0	0	0	0	0	4	0	0	0
+Luehea_divaricata	74	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+Nicotiana_alata	0	0	2	0	0	0	2	8	2	2	0	0	0	0	0	2	0
+Oenothera_ravenii	0	2	0	11	2	2	40	19	3	26	0	0	0	0	0	0	6

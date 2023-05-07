@@ -1,0 +1,14 @@
+	Tubo_floral
+Calliandra_brevipes	0.1
+Cantinoa_mutabilis	0.3
+Cereus_hildmannianus	7.7
+Duranta_erecta	1.4
+Hedychium_coronarium	8.6
+Hibiscus_rosa-sinensis	2.6
+Inga_vera	1.4
+Inga_marginata	0.1
+Ipomoea_alba	9.2
+Lantana_camara	0.9
+Luehea_divaricata	0.1
+Nicotiana_alata	5.5
+Oenothera_ravenii	4.8

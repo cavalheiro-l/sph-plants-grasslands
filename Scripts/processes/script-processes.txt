@@ -1,0 +1,493 @@
+library(ade4)
+
+tree <- "((((Calliandra_brevipes:24.139999,(Inga_marginata:12.070000,Inga_vera:12.070000)Node5:12.070000)Node4:81.860001,((Hibiscus_rosa-sinensis:61.000000,Luehea_divaricata:61.000000)Node7:44.000000,Oenothera_ravenii:105.000000)Node6:1.000000)Node3:11.000000,(((Cantinoa_mutabilis:61.000000,(Lantana_camara:30.500000,Duranta_erecta:30.500000)Node11:30.500000)Node10:23.000000,(Ipomoea_alba:65.000000,Nicotiana_alata:65.000000)Node12:19.000000)Node9:28.000000,Cereus_hildmannianus:112.000000)Node8:5.000000)Node2:43.000000,Hedychium_coronarium:160.000000)Node1:1.000000;"
+
+tree.phylog <- newick2phylog(tree)
+originality_pl <- originality(tree.phylog, 5)
+
+tree <- "(((Agrius_cingulata:12.65552189,(Manduca_florestan:6.082928071,((Manduca_contracta:0.533481752,Manduca_brasiliensis:0.5334817521)NA:1.600445252,Manduca_diffisa:2.133927):3.949001071):6.572593818):8.011268119,Protambulyx_strigilis:20.66679001):7.057676243,(((Eumorpha_labruscae:11.942557,((Eumorpha_triangulum:1.6115755,Eumorpha_vitis:1.611575504)NA:1.6115755,Eumorpha_fasciatus:3.223151):8.719406):8.361167954,((Pachylia_ficus:4.2615585,Pachylia_syces:4.261558504)NA:12.19267236,((Aellopos_titan:8.1442187,Perigonia_passerina:8.144218704):7.273278017,Erinnyis_ello:15.41749672):1.036734143):3.849494094):1.460363581,(Xylophanes_tersa:6.057050714,Xylophanes_anubus:6.057050714):15.70703782):5.960377716);"
+
+tree.phylog <- newick2phylog(tree)
+originality_sph <- originality(tree.phylog, 5)
+
+
+
+library(bipartite)
+
+animals_orig <- read.table("originality_sph.txt")
+plants_orig <- read.table("originality_pl.txt")
+
+obs_network <- as.matrix(read.table("rede.txt"))
+
+invez <- function(orig, p=0.1, obs_network){ 
+  z2 <- abs(scale(orig))
+  inv <- ((max(z2)-z2)/max(z2))
+  inv <- inv/sum(inv)
+  con <- (sum(inv)/sum(obs_network)) * p 
+  inv <- (inv + con)/sum(inv + con)
+  return(inv)
+}
+constant <- function(rede_obs, p=0.1){ 
+  const <- (1/sum(obs_network)) * p
+  return(const)
+}
+
+plants_plus <- plants_orig
+animals_plus <- animals_orig
+plants_minus <- 1 - plants_orig
+animals_minus <- 1 - animals_orig
+plants_med <- invez(plants_orig, obs_network = obs_network)
+animals_med <- invez(animals_orig, obs_network = obs_network)
+plants_0 <- rep(1, length(plants_orig))
+animals_0 <- rep(1, length(animals_orig))
+
+matrixmaker <- function(rows, columns){
+  matrixp <- matrix(nrow = length(rows), ncol = length(columns),byrow= TRUE)
+  for(i in 1:length(columns)){
+    matrixp[,i]<- columns[i] * rows
+  }
+  matrixp <- matrixp/sum(matrixp)
+}
+
+plants_plus <- as.matrix(plants_plus)
+class(plants_plus)
+
+animals_plus <- as.matrix(animals_plus)
+class(animals_plus)
+
+plants_minus <- as.matrix(plants_minus)
+class(plants_minus)
+
+animals_minus <- as.matrix(animals_minus)
+class(animals_minus)
+
+plants_med <- as.matrix(plants_med)
+class(plants_med)
+
+animals_med <- as.matrix(animals_med)
+class(animals_med)
+
+plants_0 <- as.matrix(plants_0)
+class(plants_0)
+
+animals_0 <- as.matrix(animals_0)
+class(animals_0)
+
+View(plants_plus)
+View(animals_plus)
+View(plants_minus)
+View(animals_minus)
+View(plants_med)
+View(animals_med)
+View(plants_0)
+View(animals_0)
+
+H_plus_plus <- matrixmaker (animals_plus, plants_plus)
+H_plus_minus <- matrixmaker (animals_plus, plants_minus)
+H_minus_plus <- matrixmaker (animals_minus, plants_plus)
+H_minus_minus <- matrixmaker(animals_minus, plants_minus)
+H_med_plus <- matrixmaker(animals_med, plants_plus)
+H_med_minus <- matrixmaker(animals_med, plants_minus)
+H_med_med <- matrixmaker(animals_med, plants_med)
+H_plus_med <- matrixmaker(animals_plus, plants_med)
+H_minus_med <- matrixmaker(animals_minus, plants_med)
+
+plants_0 <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+plants_0 <- as.matrix(plants_0)
+class(plants_0)
+
+animals_0 <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+animals_0 <- as.matrix(animals_0)
+class(animals_0)
+
+H_0_plus <- matrixmaker(animals_0, plants_plus)
+H_0_minus <- matrixmaker(animals_0, plants_minus)
+H_minus_0 <- matrixmaker(animals_minus, plants_0)
+H_plus_0 <- matrixmaker(animals_plus, plants_0)
+H_med_0 <- matrixmaker(animals_med, plants_0)
+H_0_med <- matrixmaker(animals_0, plants_med)
+
+library("xlsx")
+write.xlsx(H_plus_plus, file = "H_plus_plus.xlsx")
+write.xlsx(H_plus_minus, file = "H_plus_minus.xlsx")
+write.xlsx(H_minus_plus, file = "H_minus_plus.xlsx")
+write.xlsx(H_minus_minus, file = "H_minus_minus.xlsx")
+write.xlsx(H_med_plus, file = "H_med_plus.xlsx")
+write.xlsx(H_med_minus, file = "H_med_minus.xlsx")
+write.xlsx(H_med_med, file = "H_med_med.xlsx")
+write.xlsx(H_plus_med, file = "H_plus_med.xlsx")
+write.xlsx(H_minus_med, file = "H_minus_med.xlsx")
+write.xlsx(H_0_plus, file = "H_0_plus.xlsx")
+write.xlsx(H_0_minus, file = "H_0_minus.xlsx")
+write.xlsx(H_minus_0, file = "H_minus_0.xlsx")
+write.xlsx(H_plus_0, file = "H_plus_0.xlsx")
+write.xlsx(H_med_0, file = "H_med_0.xlsx")
+write.xlsx(H_0_med, file = "H_0_med.xlsx")
+
+library(stats)
+results <- matrix(0,ncol=3,nrow=15)
+colnames(results)<-c("likelihood","AIC","Model")
+
+View(results)
+
+lik <- dmultinom(obs_network, prob= H_plus_plus, log=TRUE)
+aic = 2 *(-lik) + 2 * 2 
+results[1,1]<- round(lik, digits=0)
+results[1,2]<- round(aic, digits=0)
+results[1,3] <- H+/+
+
+lik <- dmultinom(obs_network, prob= H_plus_minus, log=TRUE)
+aic = 2 *(-lik) + 2 * 2
+results[2,1]<- round(lik, digits=0)
+results[2,2]<- round(aic, digits=0)
+results[2,3] <- “H+/-”
+
+lik <- dmultinom(obs_network, prob= H_minus_plus, log=TRUE)
+aic = 2 *(-lik) + 2 * 2
+results[3,1]<- round(lik, digits=0)
+results[3,2]<- round(aic, digits=0)
+results[3,3] <- “H-/+”
+
+lik <- dmultinom(obs_network, prob= H_minus_minus, log=TRUE)
+aic = 2 *(-lik) + 2 * 2
+results[4,1]<- round(lik, digits=0)
+results[4,2]<- round(aic, digits=0)
+results[4,3] <- “H-/-”
+
+lik <- dmultinom(obs_network, prob= H_med_med, log=TRUE)
+aic = 2 *(-lik) + 2 * 2
+results[5,1]<- round(lik, digits=0)
+results[5,2]<- round(aic, digits=0)
+results[5,3] <- “Hμ/μ”
+
+lik <- dmultinom(obs_network, prob= H_med_minus, log=TRUE)
+aic = 2 *(-lik) + 2 * 2
+results[6,1]<- round(lik, digits=0)
+results[6,2]<- round(aic, digits=0)
+results[6,3] <- “Hμ/-“
+
+lik <- dmultinom(obs_network, prob= H_med_plus, log=TRUE)
+aic = 2 *(-lik) + 2 * 2
+results[7,1]<- round(lik, digits=0)
+results[7,2]<- round(aic, digits=0)
+results[7,3] <- “Hμ/+“
+
+lik <- dmultinom(obs_network, prob= H_plus_med, log=TRUE)
+aic = 2 *(-lik) + 2 * 2
+results[8,1]<- round(lik, digits=0)
+results[8,2]<- round(aic, digits=0)
+results[8,3] <- “H+/μ“
+
+lik <- dmultinom(obs_network, prob= H_minus_med, log=TRUE)
+aic = 2 *(-lik) + 2 * 2
+results[9,1]<- round(lik, digits=0)
+results[9,2]<- round(aic, digits=0)
+results[9,3] <- “H-/μ“
+
+lik <- dmultinom(obs_network, prob = H_0_plus, log = TRUE)
+aic = 2 *(-lik) + 2 * 2
+results[10,1]<- round(lik, digits=0)
+results[10,2]<- round(aic, digits=0)
+results[10,3] <- “H0/+“
+
+lik <- dmultinom(obs_network, prob = H_0_minus, log = TRUE)
+aic = 2 *(-lik) + 2 * 2
+results[11,1]<- round(lik, digits=0)
+results[11,2]<- round(aic, digits=0)
+results[11,3] <- “H0/-“
+
+lik <- dmultinom(obs_network, prob = H_minus_0, log = TRUE)
+aic = 2 *(-lik) + 2 * 2
+results[12,1]<- round(lik, digits=0)
+results[12,2]<- round(aic, digits=0)
+results[12,3] <- “H-/0“
+
+lik <- dmultinom(obs_network, prob = H_plus_0, log = TRUE)
+aic = 2 *(-lik) + 2 * 2
+results[13,1]<- round(lik, digits=0)
+results[13,2]<- round(aic, digits=0)
+results[13,3] <- “H+/0“
+
+lik <- dmultinom(obs_network, prob = H_med_0, log = TRUE)
+aic = 2 *(-lik) + 2 * 2
+results[14,1]<- round(lik, digits=0)
+results[14,2]<- round(aic, digits=0)
+results[14,3] <- “Hμ/0“
+
+lik <- dmultinom(obs_network, prob = H_0_med, log = TRUE)
+aic = 2 *(-lik) + 2 * 2
+results[15,1]<- round(lik, digits=0)
+results[15,2]<- round(aic, digits=0)
+results[15,3] <- “H0/μ“
+
+results
+write.xlsx(results, file = "results.xlsx")
+
+conf.lik.ran<-function(obs=obs_network, iter=10000, alpha=0.05){
+  resu <- numeric(iter)
+  for(i in 1:iter){
+    ranmat= replicate(ncol(obs), runif(nrow(obs)))
+    ranmat=ranmat/sum(ranmat)
+    lik = dmultinom(obs, prob=ranmat, log = TRUE)
+    resu[i]= 2 *(-lik) + 2 * 1 #number of parameters is set to 1
+  }
+  xs<-sort(resu)
+  n<-length(xs)
+  lo<-xs[round(n*alpha/2)]
+  up<-xs[round(n*(1-alpha/2))]
+  med = mean(xs)
+  res<-list(conf_up=up,conf_low=lo,mean.r=med)
+  res
+}
+conf.lik.ran(obs_network)
+
+
+library(bipartite)
+
+rede=read.table("rede.txt", header=TRUE) 
+class(rede)
+rede=as.matrix(rede)
+plotweb(rede)
+visweb(rede)
+
+abund_pl=read.table("abund_pl.txt", h=F) 
+abund_pl
+abund_sph=read.table("abund_sph.txt", h=F)
+abund_sph
+abund_pl=as.vector(abund_pl$V1)
+abund_sph=as.vector(abund_sph$V1)
+
+A=abund_sph%*%t(abund_pl)
+class(A) 
+sum(A) 
+A=A/sum(A) 
+sum(A) 
+visweb(A) 
+A
+
+fenol_sph=read.table("fenol_sph.txt", h=T)
+fenol_sph
+class(fenol_sph)
+fenol_sph=as.matrix(fenol_sph)
+class(fenol_sph)
+
+fenol_pl=read.table("fenol_pl.txt", h=T)
+fenol_pl
+class(fenol_pl)
+fenol_pl=as.matrix(fenol_pl)
+class(fenol_pl)
+
+fenol=fenol_sph%*%t(fenol_pl)
+class(fenol)
+F=fenol/sum(fenol) 
+sum(F)
+plotweb(F)
+visweb(F)
+F
+
+morfo_sph <- as.matrix(read.table("morfo_sph.txt", h=T))
+morfo_sph
+class(morfo_sph)
+
+morfo_pl <- as.matrix(read.table("morfo_pl.txt",h=T))
+morfo_pl
+class(morfo_pl)
+
+M <- 1-(as.matrix(vegdist(rbind(morfo_pl,morfo_sph), method = "gower"))[(length(morfo_pl)+1):(length(morfo_pl)+length(morfo_sph)),(1:length(morfo_pl))])
+M
+class(M) 
+M=M/sum(M)
+sum(M) 
+plotweb(M)
+visweb(M) 
+M
+
+
+H <- read.table("H_plus_0.xlsx", h=T) 
+H 
+class(H)
+H <- as.matrix(H) 
+sum(H) 
+H=H/sum(H) 
+sum(H) 
+class(H)
+H
+
+I=17
+J=13
+nula=matrix(1/(I*J),I,J)
+nula
+class(nula)
+plotweb(nula)
+visweb(nula)
+
+library("xlsx")
+write.xlsx(A, file = "matriz_A.xlsx")
+write.xlsx(M, file = "matriz_M.xlsx")
+write.xlsx(F, file = "matriz_F.xlsx")
+write.xlsx(H, file = "matriz_H.xlsx")
+write.xlsx(nula, file = "matriz_nula.xlsx")
+
+
+HM=H*M 
+HM 
+sum(HM) 
+HM=HM/sum(HM) 
+sum(HM) 
+class(HM)
+visweb(HM)
+plotweb(HM)
+HM
+
+HF=H*F 
+HF 
+sum(HF)
+HF=HF/sum(HF) 
+sum(HF) 
+class(HF)
+visweb(HF) 
+plotweb(HF)
+HF
+
+HA=H*A 
+HA 
+sum(HA) 
+HA=HA/sum(HA) 
+sum(HA) 
+class(HA) 
+visweb(HA)
+plotweb(HA)
+HA
+
+MF=M*F 
+MF 
+sum(MF) 
+MF=MF/sum(MF) 
+sum(MF) 
+class(MF) 
+visweb(MF)
+plotweb(MF)
+MF
+
+MA=M*A 
+MA 
+sum(MA) 
+MA=MA/sum(MA) 
+sum(MA) 
+class(MA)
+visweb(MA)
+plotweb(MA)
+MA
+
+FA=F*A 
+FA 
+sum(FA)
+FA=FA/sum(FA)
+sum(FA) 
+class(FA)
+visweb(FA)
+plotweb(FA)
+FA
+
+HF=H*F
+HF
+sum(HF)
+HF=HF/sum(HF) 
+sum(HF) 
+class(HF)
+visweb(HF)
+plotweb(HF)
+HF
+
+HMF=H*M*F
+HMF 
+sum(HMF) 
+HMF=HMF/sum(HMF) 
+sum(HMF)
+class(HMF)
+visweb(HMF) 
+plotweb(HMF)
+HMF
+
+HFA=H*F*A 
+HFA
+sum(HFA) 
+HFA=HFA/sum(HFA) 
+sum(HFA) 
+class(HFA)
+visweb(HFA)
+plotweb(HFA)
+HFA
+
+HMA=H*M*A 
+HMA 
+sum(HMA) 
+HMA=HMA/sum(HMA) 
+sum(HMA) 
+class(HMA) 
+visweb(HMA) 
+plotweb(HMA)
+HMA
+
+MFA=M*F*A 
+MFA 
+sum(MFA) 
+MFA=MFA/sum(MFA)
+sum(MFA) 
+class(MFA)
+visweb(MFA)
+plotweb(MFA)
+MFA
+
+HMFA=H*M*F*A 
+HMFA
+sum(HMFA)
+HMFA=HMFA/sum(HMFA) 
+sum(HMFA) 
+class(HMFA) 
+visweb(HMFA)
+plotweb(HMFA)
+HMFA
+
+
+mlik<-function(o,m.p,par){
+  lik<--dmultinom(o,prob=m.p,log=T) #Negative log likelihood
+  aic=2*lik+2*par
+  res=data.frame(lik,aic)
+  return(res)
+}
+
+
+aic1=mlik(rede,nula,par=0)
+aic1
+aic2=mlik(rede,A,par=2)
+aic2
+aic3=mlik(rede,F,par=2)
+aic3
+aic4=mlik(rede,M,par=2)
+aic4
+aic5=mlik(rede,H,par=2)
+aic5
+aic6=mlik(rede,HM,par=4)
+aic6
+aic7=mlik(rede,HF,par=4)
+aic7
+aic8=mlik(rede,HA,par=4)
+aic8
+aic9=mlik(rede,MF,par=4)
+aic9
+aic10=mlik(rede,MA,par=4)
+aic10
+aic11=mlik(rede,FA,par=4)
+aic11
+aic12=mlik(rede,HMF,par=6)
+aic12
+aic13=mlik(rede,HFA,par=6)
+aic13
+aic14=mlik(rede,HMA,par=6)
+aic14
+aic15=mlik(rede,MFA,par=6)
+aic15
+aic16=mlik(rede,HMFA,par=8)
+aic16
+
